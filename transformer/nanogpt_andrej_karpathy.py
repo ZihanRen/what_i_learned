@@ -191,9 +191,14 @@ class GPTLanguageModel(nn.Module):
         tok_emb = self.token_embedding_table(idx) # (B,T,C)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device)) # (T,C)
         x = tok_emb + pos_emb # (B,T,C)
+
+        print(f'before transformer blocks: {x.shape}')
         x = self.blocks(x) # (B,T,C)
+        print(f'after transformer blocks: {x.shape}')
         x = self.ln_f(x) # (B,T,C)
+        print(f'after layer norm: {x.shape}')
         logits = self.lm_head(x) # (B,T,vocab_size)
+        print(f'after linear layer: {logits.shape}')
 
         if targets is None:
             loss = None
@@ -234,26 +239,40 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
 #%%
 
-for iter in range(max_iters):
+# for iter in range(max_iters):
 
-    # every once in a while evaluate the loss on train and val sets
-    if iter % eval_interval == 0 or iter == max_iters - 1:
-        losses = estimate_loss()
-        print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
+#     # every once in a while evaluate the loss on train and val sets
+#     if iter % eval_interval == 0 or iter == max_iters - 1:
+#         losses = estimate_loss()
+#         print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
 
-    # sample a batch of data
-    # yb: one token shifted from xb
-    # you may construct data with different lengthes
-    xb, yb = get_batch('train')
+#     # sample a batch of data
+#     # yb: one token shifted from xb
+#     # you may construct data with different lengthes
+#     xb, yb = get_batch('train')
 
-    # evaluate the loss
-    logits, loss = model(xb, yb)
-    optimizer.zero_grad(set_to_none=True)
-    loss.backward()
-    optimizer.step()
+#     # evaluate the loss
+#     logits, loss = model(xb, yb)
+#     optimizer.zero_grad(set_to_none=True)
+#     loss.backward()
+#     optimizer.step()
 
 # generate from the model
-context = torch.zeros((1, 3), dtype=torch.long, device=device)
+context = torch.zeros((3, 10), dtype=torch.long, device=device)
 print(decode(m.generate(context, max_new_tokens=5)[0].tolist()))
 #open('more.txt', 'w').write(decode(m.generate(context, max_new_tokens=10000)[0].tolist()))
+
+# %% linear transformation only operates on the last dimension of matrix
+# (2,3,4) -> (2,3,8)
+# weight matrix: (4,8): (3,4) @ (4,8) = (3,8)
+# weight matrix has nothing to do with the first two dimensions
+
+
+a = torch.randn(2,3,4)
+dense1 = nn.Linear(4,8)
+
+with torch.no_grad():
+    b = dense1(a)
+    print(b.shape)
+
 # %%
