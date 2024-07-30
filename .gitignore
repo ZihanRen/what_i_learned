@@ -11,3 +11,4 @@
 *.csv
 *.tif
 *.gz
+.env
