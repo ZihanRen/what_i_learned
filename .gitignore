@@ -12,3 +12,5 @@
 *.tif
 *.gz
 .env
+# ignore all pdf
+*.pdf

@@ -56,6 +56,9 @@ Memory management: The two pointers pattern is vital in memory allocation and de
 
 Questions list:
 
+LC 15
+LC 125
+
 
 ## Fast & Slow Pointers
 
@@ -81,6 +84,9 @@ Cycle or intersection detection: The problem involves detecting a loop within a 
 Find the starting element at the second quantile: The problem involves finding the starting element of the second quantile, i.e., second half, second tertile, second quartile, etc. For example, the problem asks to find the middle element of an array or a linked list.
 
 Questions list:
+lc 202
+lc 141
+
 
 
 ## Merge Intervals
@@ -101,6 +107,8 @@ Application:
 2. Meeting rooms: Given an array of meeting time intervals consisting of start and end times, determine if a person could attend all meetings.
 
 Questions list:
+lc 56
+lc 57
 
 
 ## Subsets
@@ -130,6 +138,8 @@ The following examples illustrate some problems that can be solved with this app
 2. Combination sum: Return all combinations of integers in an array that add up to a target number.
 
 Questions list:
+LC 78
+LC 46
 
 
 ## Backtracking
@@ -166,6 +176,8 @@ Game AI (Artificial Intelligence): In games like chess or Go, AI algorithms use 
 Pathfinding algorithms: In pathfinding problems like finding the way through a maze or routing in a network, backtracking is used. It tries out different paths to reach the destination. If it hits a dead end or a spot it can't pass through, it goes back and tries another path. This keeps happening until it finds a path that works and leads to the destination.
 
 Questions list:
+LC 51
+LC 79
 
 
 ## In-Place Manipulation (Linked Lists)
@@ -185,6 +197,8 @@ File system management: File systems often use linked lists to manage directorie
 Memory management: In low-level programming or embedded systems, dynamic memory allocation and deallocation often involve manipulating linked lists of free memory blocks. Operations such as merging adjacent free blocks or splitting large blocks can be implemented in place to optimize memory usage.
 
 Questions list:
+LC 206
+LC 25
 
 
 ## Hash Map
@@ -463,3 +477,10 @@ Questions list:
 ## Trie
 
 Questions list:
+
+
+# Memory of important time complexity
+
+* find if an element appear in a set, o(1)
+* sum of total digits square ologn
+
