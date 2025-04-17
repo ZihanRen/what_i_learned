@@ -263,7 +263,7 @@ However, if we mistakenly add an additional step in our recipe that contradicts 
 Topological sorting is crucial for converting a partial ordering to a complete ordering, especially when certain tasks have defined dependencies while others do not.
 
 #### Applications:
-* Course scheduling
+* Course prerequisites: Given a list of courses, each with a prerequisite course, determine if it’s possible to complete all the courses and, if so, provide a valid order in which the courses can be taken.
 * Build systems
 * Dependency resolution
 * Task scheduling with prerequisites
@@ -348,6 +348,9 @@ Questions list:
 
 ## Cyclic Sort
 
+this is better tutorial: https://leetcode.com/explore/learn/card/graph/623/kahns-algorithm-for-topological-sorting/3886/
+
+
 * Specialized sorting technique used when dealing with a range of numbers in a specific range
 * Places each element at its correct position in one pass
 
@@ -359,13 +362,43 @@ Is there a way to determine whether to use cyclic sort on a given unsorted array
 
 Unlike algorithms with nested loops or recursive calls, cyclic sort achieves a linear time complexity of O(n) due to its streamlined approach of iteratively placing each element in its correct position within a single pass through the array. This makes it fast and reliable, especially for small arrays. Moreover, cyclic sort doesn't require any extra space, as it sorts the elements in place.
 
+Cyclic sort, while efficient in specific scenarios, does come with its limitations. Let’s go over a few:
+
+Limited range: Cyclic sort’s efficiency is contingent upon the range of elements being limited and known beforehand. When dealing with arrays with an unknown or expansive range, the cyclic sort may not perform optimally. For example, if we have an array of prices of goods ranging from 1 to 100, cyclic sort would efficiently organize them. However, if the price range extended beyond or was unknown, cyclic sort might not provide optimal results.
+
+Not stable: Cyclic sort lacks stability as a sorting algorithm. This means it may alter the relative order of equal elements during sorting, which could be undesirable in scenarios where maintaining the original order is important. For example, in a task queue where tasks with equal priority should be processed in the order they were received, cyclic sort might reorder tasks with the same priority, disrupting the original sequence.
+
+Not suitable for noninteger arrays: Cyclic sort is optimized for sorting arrays of integers, attempting to use it on noninteger arrays may not produce the desired outcome. Suppose we want to sort an array of names alphabetically, then using cyclic sort is not a good choice.
+
+Not suitable when multiple attributes play a significant role: Cyclic sort is primarily designed for arrays of integers only, so it may not handle cases where the input has multiple attributes associated with it. For example, given an array containing objects representing employees, where each object has attributes such as name, age, and salary, if we need to sort the objects with respect to all three attributes then using cyclic sort on just salary may not produce the desired outcome. This is because the other two attributes play an equal role in deciding the final order, so we can’t just take one attribute while sorting the array.
+
+
+#### Demo code and time complexity
+* time complexity: O(n)
+* space complexity: O(1)
+
+```
+def cyclic_sort(nums):
+    # initial
+    i = 0
+    while i < len(nums)-1:
+        correct_idx = nums[i] - 1
+        # keep swapping until correct_idx equals to i
+        if correct_idx != i:
+            nums[i], nums[correct_idx] = nums[correct_idx], nums[i]
+        else:
+            i+=1
+    return nums
+```
+
 #### Applications:
 * Finding missing numbers
 * Finding duplicates
 * Array rearrangement problems
 
 Questions list:
-
+LC 41
+LC 448
 
 ## Greedy Technique
 
