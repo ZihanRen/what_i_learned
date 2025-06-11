@@ -14,3 +14,15 @@
 .env
 # ignore all pdf
 *.pdf
+
+# add some regular files to be ignored in git
+# such as .DS_Store
+.csv
+.txt
+.json
+.yaml
+.yml
+.xml
+.html
+.css
+.js

@@ -1,0 +1,187 @@
+purchase
+_
+demographics
+_
+data = pd.read
+_
+csv('user
+_
+demographics.csv')
+demographics
+_
+
+paywall
+paywall
+_
+views = pd.read
+_
+csv('paywall
+_
+_
+views.head(n=2)
+
+
+data.head(n=2)_
+data.merge(
+paywall
+_
+views,how='left'
+, on=['uid'])
+# Find the total revenue per user over the period
+total
+_
+revenue = purchase
+_
+data.groupby(by=['uid'], as
+_
+index=False).price.sum()
+total
+_
+revenue.price = np.where(
+np.isnan(total
+_
+revenue.price), 0, total
+_
+revenue.price)
+# Calculate the average revenue per user
+avg_
+revenue = total
+_
+revenue.price.mean()
+print(avg_
+revenue)
+
+
+avg_
+revenue * 1.01 # 1% lift in revenue per user
+16.322839545454478
+# Most reasonable option
+avg_
+revenue * 1.1 # 10% lift in revenue per user
+17.77
+avg_
+revenue * 1.2 # 20% lift in revenue per user
+
+
+Standard deviation
+DataFrame.std() : Calculate the standard deviation of a pandas DataFrame
+# Calculate the standard deviation of revenue per user
+revenue
+variation = total
+_
+_
+re
+
+ariability of revenue per user
+# Calculate the standard deviation of revenue per user
+revenue
+variation = total
+_
+_
+revenue.price.std()
+17.520
+Good to contextualize standard deviation (sd) by calculating: mean / standard deviation?
+revenue
+_
+variation / avg_
+revenue
+1.084
+
+Variability of purchases per user
+# Find the average number of purchases per user
+avg_purchases = total
+_purchases.purchase.mean()
+3.15
+# Find the variance in the number of purchases per user
+purchase
+variation = total
+_
+_purchases.purchase.std()
+2.68
+purchase
+_
+variation / avg_purchases
+0.850
+
+# Aggregate our data sets
+purchase
+_
+data = demographics
+_
+paywall
+_
+views, how='inner'
+data.merge(
+, on=['uid']
+)
+# conversion rate = total purchases / total paywall views
+conversion
+_
+rate = (sum(purchase
+_
+data.purchase) /
+purchase
+_
+data.purchase.count())
+print(conversion
+_
+rate)
+
+
+def get
+_power(n, p1, p2, cl):
+alpha = 1 - cl
+qu = stats.norm.ppf(1 - alpha/2)
+diff = abs(p2 - p1)
+bp = (p1 + p2) / 2
+...
+power = power
+_part
+_
+one + power
+_part
+two
+_
+return(power)
+# Calculate the sample size needed for the specified
+# power and confidence level
+def get
+_
+sample
+_
+size(power, p1, p2, cl, max
+_
+n = 1000000):
+n = 1
+while n <= max
+n:
+_
+tmp_power = get
+_power(n, p1, p2, cl)
+if tmp_power >= power:
+return n
+else:
+n = n + 1
+
+sample
+size
+_
+_per
+_group = get
+_
+sample
+_
+size(
+0.8 # Desired Power
+conversion
+_
+rate,
+conversion
+_
+rate * 1.1 # Lifted conversion rate,
+0.95 # Confidence level)
+print(sample
+size
+_
+_per
+_group)
