@@ -61,3 +61,85 @@ plt.legend(loc='upper left')
 
 plt.show()
 # %%
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ODE: dx/dt = x (The exact solution is x = e^t)
+def f(x): return x
+
+def euler_solve(x0, t_end, dt):
+    t_values = np.arange(0, t_end + dt, dt)
+    x_values = np.zeros(len(t_values))
+    x_values[0] = x0
+    
+    for i in range(1, len(t_values)):
+        # x_n = x_{n-1} + f(x_{n-1}) * dt
+        x_values[i] = x_values[i-1] + f(x_values[i-1]) * dt
+    return t_values, x_values
+
+# Parameters
+x0 = 1
+t_end = 4
+dt_large = 1.0
+dt_small = 0.2
+
+# Get solutions
+t_exact = np.linspace(0, t_end, 100)
+x_exact = np.exp(t_exact)
+
+t_l, x_l = euler_solve(x0, t_end, dt_large)
+t_s, x_s = euler_solve(x0, t_end, dt_small)
+
+# Plotting
+plt.figure(figsize=(12, 7))
+plt.plot(t_exact, x_exact, 'k', label='Exact Solution ($e^t$)', linewidth=2)
+plt.step(t_l, x_l, 'r-o', where='post', label=f'Euler (Large dt={dt_large})', alpha=0.7)
+plt.plot(t_s, x_s, 'b-s', label=f'Euler (Small dt={dt_small})', markersize=4)
+
+plt.title("How Error Accumulates Step-by-Step")
+plt.xlabel("Time (t)")
+plt.ylabel("Value (x)")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+# %%
+
+import numpy as np
+import pandas as pd
+
+# ODE: dx/dt = x, x(0) = 1. Exact: x(t) = e^t
+def f(x): return x
+def exact(t): return np.exp(t)
+
+def get_errors(dt):
+    # Local Error (First step only)
+    x1_euler = 1 + f(1) * dt
+    x1_exact = exact(dt)
+    local_err = abs(x1_exact - x1_euler)
+    
+    # Global Error (Total error at t=1.0)
+    steps = int(1.0 / dt)
+    x_n = 1.0
+    for _ in range(steps):
+        x_n = x_n + f(x_n) * dt
+    global_err = abs(exact(1.0) - x_n)
+    
+    return local_err, global_err
+
+# Test different step sizes
+dts = [0.1, 0.05, 0.025, 0.0125]
+results = []
+
+for dt in dts:
+    loc, glob = get_errors(dt)
+    results.append({"dt": dt, "Local Error": loc, "Global Error": glob})
+
+df = pd.DataFrame(results)
+print(df)
+
+# Observe: 
+# When dt is halved (0.1 -> 0.05):
+# Local Error drops by ~4x (0.005 -> 0.0012) -> O(dt^2)
+# Global Error drops by ~2x (0.12 -> 0.06) -> O(dt^1)
+# %%
