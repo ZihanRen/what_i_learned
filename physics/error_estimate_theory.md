@@ -207,3 +207,68 @@ Notice that the final error ($0.1$) is the same magnitude as our step size ($\De
 
 ## 5. Visualizing the "Drift" with Python
 This script compares the **Local Error** (error in just the first step) versus the **Global Error** (total error at the end) as we change $\Delta t$.
+
+
+
+# Summary: Euler's Method, Taylor Series, and Error Analysis
+
+## 1. The Fundamental Relationship
+The Euler method is not just "related" to the Taylor series; it **is** the Taylor series expansion truncated after the first derivative.
+
+### The Mathematical Link
+**Exact Taylor Series:**
+$$x(t + \Delta t) = x(t) + \dot{x}(t)\Delta t + \frac{1}{2}\ddot{x}(t)(\Delta t)^2 + O(\Delta t^3)$$
+
+**Euler's Method:**
+$$x_{new} = x_{old} + f(x_{old})\Delta t$$
+
+Since $\dot{x} = f(x)$, Euler's method is identical to the first two terms of the Taylor series. It approximates the solution curve as a straight line, ignoring all higher-order terms (curvature, jerk, etc.).
+
+---
+
+## 2. The Source of Error
+The "error" in Euler's method comes from the terms we threw away. The dominant source of error is the **first term** that was truncated.
+
+### The Error Formula
+$$\text{Local Error} \approx \frac{1}{2} \ddot{x}(t) (\Delta t)^2$$
+
+### Physical Interpretation
+* **$\ddot{x}$ (Curvature/Acceleration):** The error is controlled by the curvature of the actual solution.
+    * If $\ddot{x} = 0$ (straight line), Euler is perfect.
+    * If $\ddot{x}$ is large (sharp turn), Euler's linear approximation fails, and error spikes.
+* **$\Delta t$ (Step Size):** The error scales with the square of the step size.
+
+---
+
+## 3. The Paradox of Error Estimation
+**The Problem:** To calculate the exact error, we need the exact second derivative $\ddot{x}$, which requires knowing the exact solution. If we knew the exact solution, we wouldn't need a numerical method.
+
+**The Solution:** We use an "Approximation of the Error."
+Instead of calculating $\text{Exact} - \text{Approx}$, we calculate:
+$$\text{Estimated Error} \approx \text{Better Approximation} - \text{Worse Approximation}$$
+
+### Common Techniques
+1.  **Step Doubling (Richardson Extrapolation):**
+    * Take one big step ($\Delta t$).
+    * Take two small steps ($\Delta t/2$).
+    * Compare the results. If they diverge, the error is high.
+2.  **Embedded Methods (e.g., RK45):**
+    * Compute the step using a 4th-order method.
+    * Compute the step using a 5th-order method.
+    * The difference between them is the error estimate.
+
+---
+
+## 4. "Order" of Accuracy
+When we say a method is **"Order $n$,"** we mean it matches the Taylor Series exactly up to the term $(\Delta t)^n$.
+
+| Method | Order | Matches Taylor Series Terms | Global Error Behavior |
+| :--- | :---: | :--- | :--- |
+| **Euler** | **1st** | $x, \dot{x}$ (Velocity) | $O(\Delta t^1)$ |
+| **Midpoint** | **2nd** | $x, \dot{x}, \ddot{x}$ (Acceleration) | $O(\Delta t^2)$ |
+| **Runge-Kutta 4** | **4th** | $x, \dot{x}, \ddot{x}, \dddot{x}, x^{(4)}$ | $O(\Delta t^4)$ |
+
+**Why High Order Matters:**
+High-order methods capture more physics (curvature, jerk) without explicitly calculating derivatives.
+* **Euler (1st Order):** Reducing step size by 10x reduces error by **10x**.
+* **RK4 (4th Order):** Reducing step size by 10x reduces error by **10,000x**.
